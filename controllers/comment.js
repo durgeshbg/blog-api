@@ -5,3 +5,8 @@ exports.get_comments = asyncHandler(async function (req, res, next) {
   const comments = await Comment.find({ post: req.params.id }, { __v: 0 }).exec();
   res.json({ comments: comments });
 });
+
+exports.get_comment = asyncHandler(async function (req, res, next) {
+  const comments = await Comment.findById(req.params.id, { __v: 0 }).exec();
+  res.json({ comments: comments });
+});
