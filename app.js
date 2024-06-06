@@ -34,8 +34,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookiParser());
 
-app.use('/blogs', require('./routes/blog'));
-app.use('/blogs/:id/comments', require('./routes/comment'));
+app.use('/posts', require('./routes/post'));
+app.use('/posts/:id/comments', require('./routes/comment'));
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port: ${process.env.PORT}`);
