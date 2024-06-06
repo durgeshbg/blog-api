@@ -6,4 +6,7 @@ exports.get_posts = asyncHandler(async function (req, res, next) {
   res.json({ posts: posts });
 });
 
-
+exports.get_post = asyncHandler(async function (req, res, next) {
+  const posts = await Post.findById(req.params.id, { __v: 0 });
+  res.json({ posts: posts });
+});
