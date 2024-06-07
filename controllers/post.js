@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const Comment = require('../models/comment');
 const asyncHandler = require('express-async-handler');
 const post_validators = require('../validators/post');
 const { validationResult } = require('express-validator');
@@ -48,3 +49,11 @@ exports.update_post = [
     }
   }),
 ];
+
+exports.delete_post = asyncHandler(async function (req, res, next) {
+  const post = await Post.findByIdAndDelete(req.params.id);
+  if (post) {
+    await Comment.deleteMany({ post: post._id });
+  }
+  res.json({ post });
+});
