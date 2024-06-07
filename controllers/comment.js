@@ -51,3 +51,9 @@ exports.update_comment = [
     }
   }),
 ];
+exports.delete_comment = [
+  asyncHandler(async function (req, res, next) {
+    const comment = await Comment.findByIdAndDelete(req.params.cid);
+    res.json({ comment });
+  }),
+];
