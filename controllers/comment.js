@@ -3,19 +3,19 @@ const asyncHandler = require('express-async-handler');
 const comment_validators = require('../validators/comment');
 const { validationResult } = require('express-validator');
 
-exports.get_comments = asyncHandler(async function (req, res, next) {
+exports.get_comments = asyncHandler(async function (req, res) {
   const comments = await Comment.find({ post: req.params.id }, { __v: 0 }).exec();
   res.json({ comments });
 });
 
-exports.get_comment = asyncHandler(async function (req, res, next) {
+exports.get_comment = asyncHandler(async function (req, res) {
   const comment = await Comment.findById(req.params.cid, { __v: 0 }).exec();
   res.json({ comment });
 });
 
 exports.create_comment = [
   ...comment_validators,
-  asyncHandler(async function (req, res, next) {
+  asyncHandler(async function (req, res) {
     const errors = validationResult(req);
     const comment = new Comment({
       text: req.body.text,
@@ -33,7 +33,7 @@ exports.create_comment = [
 
 exports.update_comment = [
   ...comment_validators,
-  asyncHandler(async function (req, res, next) {
+  asyncHandler(async function (req, res) {
     const errors = validationResult(req);
     const comment = new Comment({
       text: req.body.text,
@@ -52,7 +52,7 @@ exports.update_comment = [
   }),
 ];
 exports.delete_comment = [
-  asyncHandler(async function (req, res, next) {
+  asyncHandler(async function (req, res) {
     const comment = await Comment.findByIdAndDelete(req.params.cid);
     res.json({ comment });
   }),
