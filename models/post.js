@@ -6,7 +6,7 @@ const PostSchema = new Schema(
   {
     title: { type: String, required: true },
     body: { type: String, required: true },
-    public: { type: Boolean, required: true },
+    public: { type: Boolean, required: true, default: false },
   },
   { timestamps: true }
 );
