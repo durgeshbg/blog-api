@@ -36,6 +36,7 @@ app.use(cookiParser());
 
 app.use('/posts', require('./routes/post'));
 app.use('/posts', require('./routes/comment'));
+app.use('/users', require('./routes/user'));
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port: ${process.env.PORT}`);
