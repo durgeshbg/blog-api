@@ -29,3 +29,22 @@ exports.create_post = [
     }
   }),
 ];
+exports.update_post = [
+  ...post_validators,
+  asyncHandler(async function (req, res, next) {
+    const errors = validationResult(req);
+    const post = new Post({
+      title: req.body.title,
+      body: req.body.body,
+      _id: req.params.id,
+    });
+    if (!errors.isEmpty()) {
+      res.json({ post, errors: errors.array() });
+    } else {
+      const updatedPost = await Post.findByIdAndUpdate(req.params.id, post, {
+        new: true,
+      });
+      res.json({ updatedPost });
+    }
+  }),
+];
