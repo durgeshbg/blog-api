@@ -3,22 +3,24 @@ const Comment = require('../models/comment');
 const asyncHandler = require('express-async-handler');
 const post_validators = require('../validators/post');
 const { validationResult } = require('express-validator');
-const passport = require('passport');
 const { isAdmin, isAuthJWT } = require('./authmiddleware');
+const { isValidObjectId } = require('mongoose');
 
 exports.get_posts = [
   isAuthJWT,
   asyncHandler(async function (req, res) {
     const posts = await Post.find({}, { __v: 0 });
-    res.json({ posts: posts });
+    res.json({ posts: posts.length ? posts : 'No posts' });
   }),
 ];
 
 exports.get_post = [
   isAuthJWT,
   asyncHandler(async function (req, res) {
+    if (!isValidObjectId(req.params.id))
+      res.status(400).json({ error: 'Invalid post ID' });
     const post = await Post.findById(req.params.id, { __v: 0 });
-    res.json({ post });
+    res.json({ post: post ? post : "Post doesn't exist" });
   }),
 ];
 
@@ -33,7 +35,7 @@ exports.create_post = [
       body: req.body.body,
     });
     if (!errors.isEmpty()) {
-      res.json({ post, errors: errors.array() });
+      res.status(400).json({ post, errors: errors.array() });
     } else {
       await post.save();
       res.json({ post });
@@ -52,7 +54,7 @@ exports.update_post = [
       _id: req.params.id,
     });
     if (!errors.isEmpty()) {
-      res.json({ post, errors: errors.array() });
+      res.status(400).json({ post, errors: errors.array() });
     } else {
       const updatedPost = await Post.findByIdAndUpdate(req.params.id, post, {
         new: true,
