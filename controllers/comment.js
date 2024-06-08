@@ -19,7 +19,7 @@ exports.create_comment = [
     const errors = validationResult(req);
     const comment = new Comment({
       text: req.body.text,
-      username: req.body.username,
+      username: req.user._id,
       post: req.params.id,
     });
     if (!errors.isEmpty()) {
@@ -37,7 +37,7 @@ exports.update_comment = [
     const errors = validationResult(req);
     const comment = new Comment({
       text: req.body.text,
-      username: req.body.username,
+      username: req.user._id,
       post: req.params.id,
       _id: req.params.cid,
     });
