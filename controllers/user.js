@@ -1,13 +1,13 @@
 const asyncHandler = require('express-async-handler');
-const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const userValidators = require('../validators/user');
 const User = require('../models/user');
 const { validationResult } = require('express-validator');
+const { isAuthLocal } = require('./authmiddleware');
 require('dotenv').config();
 
 exports.login = [
-  passport.authenticate('local', { session: false }),
+  isAuthLocal,
   asyncHandler(async (req, res) => {
     const token = jwt.sign({ id: req.user._id }, process.env.SECRET);
     res.json({ token });

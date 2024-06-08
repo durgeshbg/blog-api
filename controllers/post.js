@@ -4,10 +4,10 @@ const asyncHandler = require('express-async-handler');
 const post_validators = require('../validators/post');
 const { validationResult } = require('express-validator');
 const passport = require('passport');
-const { isAdmin } = require('./authmiddleware');
+const { isAdmin, isAuthJWT } = require('./authmiddleware');
 
 exports.get_posts = [
-  passport.authenticate('jwt', { session: false }),
+  isAuthJWT,
   asyncHandler(async function (req, res) {
     const posts = await Post.find({}, { __v: 0 });
     res.json({ posts: posts });
@@ -15,7 +15,7 @@ exports.get_posts = [
 ];
 
 exports.get_post = [
-  passport.authenticate('jwt', { session: false }),
+  isAuthJWT,
   asyncHandler(async function (req, res) {
     const post = await Post.findById(req.params.id, { __v: 0 });
     res.json({ post });
@@ -23,7 +23,7 @@ exports.get_post = [
 ];
 
 exports.create_post = [
-  passport.authenticate('jwt', { session: false }),
+  isAuthJWT,
   isAdmin,
   ...post_validators,
   asyncHandler(async function (req, res) {
@@ -41,7 +41,7 @@ exports.create_post = [
   }),
 ];
 exports.update_post = [
-  passport.authenticate('jwt', { session: false }),
+  isAuthJWT,
   isAdmin,
   ...post_validators,
   asyncHandler(async function (req, res) {
@@ -63,7 +63,7 @@ exports.update_post = [
 ];
 
 exports.delete_post = [
-  passport.authenticate('jwt', { session: false }),
+  isAuthJWT,
   isAdmin,
   asyncHandler(async function (req, res) {
     const post = await Post.findByIdAndDelete(req.params.id);
