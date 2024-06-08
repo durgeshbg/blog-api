@@ -21,16 +21,16 @@ exports.isAuthorOrAdmin = asyncHandler(async (req, res, next) => {
 
 exports.isAuthLocal = (req, res, next) => {
   passport.authenticate('local', { session: false }, (err, user, info) => {
-    if (err) return res.json({ error: err });
-    if (!user) return res.json({ error: info });
+    if (err) return res.status(401).json({ error: err });
+    if (!user) return res.status(401).json({ error: info });
     req.user = user;
     return next();
   })(req, res, next);
 };
 exports.isAuthJWT = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
-    if (err) return res.json({ error: err });
-    if (!user) return res.json({ error: 'Invalid token' });
+    if (err) return res.status(401).json({ error: err });
+    if (!user) return res.status(401).json({ error: 'Invalid token' });
     req.user = user;
     return next();
   })(req, res, next);
