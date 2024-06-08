@@ -18,7 +18,7 @@ exports.get_post = [
   isAuthJWT,
   asyncHandler(async function (req, res) {
     if (!isValidObjectId(req.params.id))
-      res.status(400).json({ error: 'Invalid post ID' });
+      return res.status(400).json({ error: 'Invalid post ID' });
     const post = await Post.findById(req.params.id, { __v: 0 });
     res.json({ post: post ? post : "Post doesn't exist" });
   }),

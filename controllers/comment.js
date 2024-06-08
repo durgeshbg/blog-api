@@ -2,22 +2,28 @@ const Comment = require('../models/comment');
 const asyncHandler = require('express-async-handler');
 const comment_validators = require('../validators/comment');
 const { validationResult } = require('express-validator');
-const passport = require('passport');
 const { isAuthor, isAuthorOrAdmin, isAuthJWT } = require('./authmiddleware');
+const { isValidObjectId } = require('mongoose');
 
 exports.get_comments = [
   isAuthJWT,
   asyncHandler(async function (req, res) {
+    if (!isValidObjectId(req.params.id))
+      return res.status(400).json({ error: 'Invalid post ID' });
     const comments = await Comment.find({ post: req.params.id }, { __v: 0 }).exec();
-    res.json({ comments });
+    res.json({ comments: comments.length ? comments : 'No comments' });
   }),
 ];
 
 exports.get_comment = [
   isAuthJWT,
   asyncHandler(async function (req, res) {
+    if (!isValidObjectId(req.params.id))
+      return res.status(400).json({ error: 'Invalid Post ID' });
+    if (!isValidObjectId(req.params.cid))
+      return res.status(400).json({ error: 'Invalid comment ID' });
     const comment = await Comment.findById(req.params.cid, { __v: 0 }).exec();
-    res.json({ comment });
+    res.json({ comment: comment ? comment : "Comment doesn't exist" });
   }),
 ];
 
@@ -32,7 +38,7 @@ exports.create_comment = [
       post: req.params.id,
     });
     if (!errors.isEmpty()) {
-      res.json({ comment, errors: errors.array() });
+      res.status(400).json({ comment, errors: errors.array() });
     } else {
       await comment.save();
       res.json({ comment });
@@ -53,7 +59,7 @@ exports.update_comment = [
       _id: req.params.cid,
     });
     if (!errors.isEmpty()) {
-      res.json({ comment, errors: errors.array() });
+      res.status(400).json({ comment, errors: errors.array() });
     } else {
       const updatedComment = await Comment.findByIdAndUpdate(req.params.cid, comment, {
         new: true,
