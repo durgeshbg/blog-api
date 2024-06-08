@@ -3,18 +3,28 @@ const Comment = require('../models/comment');
 const asyncHandler = require('express-async-handler');
 const post_validators = require('../validators/post');
 const { validationResult } = require('express-validator');
+const passport = require('passport');
+const { isAdmin } = require('./authmiddleware');
 
-exports.get_posts = asyncHandler(async function (req, res) {
-  const posts = await Post.find({}, { __v: 0 });
-  res.json({ posts: posts });
-});
+exports.get_posts = [
+  passport.authenticate('jwt', { session: false }),
+  asyncHandler(async function (req, res) {
+    const posts = await Post.find({}, { __v: 0 });
+    res.json({ posts: posts });
+  }),
+];
 
-exports.get_post = asyncHandler(async function (req, res) {
-  const post = await Post.findById(req.params.id, { __v: 0 });
-  res.json({ post });
-});
+exports.get_post = [
+  passport.authenticate('jwt', { session: false }),
+  asyncHandler(async function (req, res) {
+    const post = await Post.findById(req.params.id, { __v: 0 });
+    res.json({ post });
+  }),
+];
 
 exports.create_post = [
+  passport.authenticate('jwt', { session: false }),
+  isAdmin,
   ...post_validators,
   asyncHandler(async function (req, res) {
     const errors = validationResult(req);
@@ -31,6 +41,8 @@ exports.create_post = [
   }),
 ];
 exports.update_post = [
+  passport.authenticate('jwt', { session: false }),
+  isAdmin,
   ...post_validators,
   asyncHandler(async function (req, res) {
     const errors = validationResult(req);
@@ -50,10 +62,14 @@ exports.update_post = [
   }),
 ];
 
-exports.delete_post = asyncHandler(async function (req, res) {
-  const post = await Post.findByIdAndDelete(req.params.id);
-  if (post) {
-    await Comment.deleteMany({ post: post._id });
-  }
-  res.json({ post });
-});
+exports.delete_post = [
+  passport.authenticate('jwt', { session: false }),
+  isAdmin,
+  asyncHandler(async function (req, res) {
+    const post = await Post.findByIdAndDelete(req.params.id);
+    if (post) {
+      await Comment.deleteMany({ post: post._id });
+    }
+    res.json({ post });
+  }),
+];
