@@ -9,7 +9,12 @@ const { isValidObjectId } = require('mongoose');
 exports.get_posts = [
   isAuthJWT,
   asyncHandler(async function (req, res) {
-    const posts = await Post.find({}, { __v: 0 });
+    let posts;
+    if (req.user.admin) {
+      posts = await Post.find({}, { __v: 0 });
+    } else {
+      posts = await Post.find({ public: true }, { __v: 0 });
+    }
     res.json({ posts: posts.length ? posts : 'No posts' });
   }),
 ];
