@@ -57,7 +57,7 @@ async function createUsers() {
     {
       firstname: 'Chris',
       lastname: 'Brown',
-      username: 'brown',
+      username: 'chris_brown',
       email: 'chirs@mail.com',
       password: '5678',
       admin: false,
@@ -119,62 +119,62 @@ async function createComments() {
   const comments = [
     {
       text: 'This is a comment on the first post.',
-      username: usersObs[1],
+      username: usersObs[1].username,
       post: postsObs[0],
     },
     {
       text: 'This is a comment on the second post.',
-      username: usersObs[2],
+      username: usersObs[2].username,
       post: postsObs[1],
     },
     {
       text: 'This is a comment on the first post.',
-      username: usersObs[0],
+      username: usersObs[0].username,
       post: postsObs[0],
     },
     {
       text: 'This is a comment on the first post.',
-      username: usersObs[0],
+      username: usersObs[0].username,
       post: postsObs[0],
     },
     {
       text: 'This is a comment on the second post.',
-      username: usersObs[1],
+      username: usersObs[1].username,
       post: postsObs[1],
     },
     {
       text: 'This is a comment on the third post.',
-      username: usersObs[2],
+      username: usersObs[2].username,
       post: postsObs[2],
     },
     {
       text: 'This is a comment on the fourth post.',
-      username: usersObs[0],
+      username: usersObs[0].username,
       post: postsObs[3],
     },
     {
       text: 'This is a comment on the fourth post.',
-      username: usersObs[0],
+      username: usersObs[0].username,
       post: postsObs[3],
     },
     {
       text: 'This is a comment on the second post.',
-      username: usersObs[2],
+      username: usersObs[2].username,
       post: postsObs[1],
     },
     {
       text: 'This is a comment on the fifth post.',
-      username: usersObs[2],
+      username: usersObs[2].username,
       post: postsObs[4],
     },
     {
       text: 'This is a comment on the second post.',
-      username: usersObs[1],
+      username: usersObs[1].username,
       post: postsObs[1],
     },
     {
       text: 'This is a comment on the first post.',
-      username: usersObs[1],
+      username: usersObs[1].username,
       post: postsObs[0],
     },
     // Add more comments as needed
