@@ -26,7 +26,11 @@ exports.register = [
       password: req.body.password,
     });
     if (!errors.isEmpty()) {
-      res.json({ user, errors: errors.array() });
+      const { firstname, lastname, username, email, password } = user;
+      res.status(400).json({
+        user: { firstname, lastname, username, email, password },
+        errors: errors.array(),
+      });
     } else {
       await user.save();
       const token = jwt.sign({ id: user._id }, process.env.SECRET);
