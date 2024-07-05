@@ -9,13 +9,16 @@ exports.isAdmin = (req, res, next) => {
 
 exports.isAuthor = asyncHandler(async (req, res, next) => {
   const comment = await Comment.findById(req.params.cid);
-  if (req.user.username.toString() === comment.username.toString()) next();
+  if (!comment) res.status(400).json({ error: 'Invalid Comment ID' });
+  else if (req.user.username.toString() === comment.username.toString()) next();
   else res.status(403).json({ error: 'You are not authorised' });
 });
 
 exports.isAuthorOrAdmin = asyncHandler(async (req, res, next) => {
   const comment = await Comment.findById(req.params.cid);
-  if (req.user.admin || req.user.username.toString() === comment.username.toString()) next();
+  if (!comment) res.status(400).json({ error: 'Invalid Comment ID' });
+  else if (req.user.admin || req.user.username.toString() === comment.username.toString())
+    next();
   else res.status(403).json({ error: 'You are not authorised' });
 });
 
