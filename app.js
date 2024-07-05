@@ -4,6 +4,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limiter');
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -29,6 +30,7 @@ if (process.env.NODE_ENV === 'production') {
     })
   );
 }
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
