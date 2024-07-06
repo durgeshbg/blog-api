@@ -10,7 +10,7 @@ exports.login = [
   isAuthLocal,
   asyncHandler(async (req, res) => {
     const token = jwt.sign({ id: req.user._id }, process.env.SECRET);
-    res.json({ token });
+    res.json({ token, admin: req.user.admin });
   }),
 ];
 
@@ -34,7 +34,7 @@ exports.register = [
     } else {
       await user.save();
       const token = jwt.sign({ id: user._id }, process.env.SECRET);
-      res.json({ token });
+      res.json({ token, admin: req.user.admin });
     }
   }),
 ];
