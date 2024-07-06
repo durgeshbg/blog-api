@@ -40,7 +40,9 @@ exports.create_post = [
       body: req.body.body,
     });
     if (!errors.isEmpty()) {
-      res.status(400).json({ post, errors: errors.array() });
+      res
+        .status(400)
+        .json({ post: { title: post.title, body: post.body }, errors: errors.array() });
     } else {
       await post.save();
       res.json({ post });
