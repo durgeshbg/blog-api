@@ -66,7 +66,7 @@ exports.update_post = [
       const updatedPost = await Post.findByIdAndUpdate(req.params.id, post, {
         new: true,
       });
-      res.json({ updatedPost });
+      res.json({ post: updatedPost });
     }
   }),
 ];
