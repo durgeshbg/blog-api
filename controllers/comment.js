@@ -11,7 +11,17 @@ exports.get_comments = [
     if (!isValidObjectId(req.params.id))
       return res.status(400).json({ error: 'Invalid post ID' });
     const comments = await Comment.find({ post: req.params.id }, { __v: 0 }).exec();
-    res.json({ comments: comments.length ? comments : 'No comments' });
+
+    res.json({
+      comments: comments.length
+        ? comments.map((comment) => {
+            if (comment.username === req.user.username) {
+              return { ...comment._doc, author: true };
+            }
+            return comment;
+          })
+        : 'No comments',
+    });
   }),
 ];
 
@@ -64,7 +74,7 @@ exports.update_comment = [
       const updatedComment = await Comment.findByIdAndUpdate(req.params.cid, comment, {
         new: true,
       });
-      res.json({ updatedComment });
+      res.json({ comment: updatedComment });
     }
   }),
 ];
