@@ -34,7 +34,7 @@ exports.register = [
     } else {
       await user.save();
       const token = jwt.sign({ id: user._id }, process.env.SECRET);
-      res.json({ token, admin: req.user.admin });
+      res.json({ token, admin: user.admin });
     }
   }),
 ];
