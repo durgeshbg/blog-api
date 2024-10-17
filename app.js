@@ -3,7 +3,7 @@ const cookiParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limiter');
+const { rateLimit } = require('express-rate-limit');
 const cors = require('cors');
 
 require('dotenv').config();
